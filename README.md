@@ -9,8 +9,8 @@ prize waits in the contract until the winner claims it straight to their own
 wallet. Nobody, the operator included, can choose the winner or hold the money.
 
 **Live on Arc mainnet:** https://stubby.starterdot.com
-**Contract:** [`0x7213526D82FE7E1A37A26974E343e23eF88bdfa4`](https://explorer.arc.io/address/0x7213526D82FE7E1A37A26974E343e23eF88bdfa4)
-on the Arc explorer · **Android:** [`/download/stubby.apk`](https://stubby.starterdot.com/download/stubby.apk)
+**Contract:** [`0x7213526D82FE7E1A37A26974E343e23eF88bdfa4`](https://explorer.arc.io/address/0x7213526D82FE7E1A37A26974E343e23eF88bdfa4?tab=contract)
+on the Arc explorer, with its source verified, as is the [randomness adapter](https://explorer.arc.io/address/0x66ABac54Cd4080fED9275529F6d23f8A217298B3?tab=contract) · **Android:** [`/download/stubby.apk`](https://stubby.starterdot.com/download/stubby.apk)
 
 > **This is a public showcase of a private repository.** It shows how Stubby is
 > built. A few pieces are left out so that it does not run as a copy of the
