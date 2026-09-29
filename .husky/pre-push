@@ -1,0 +1,16 @@
+# Section 13.1 wants main protected: pull requests only, no direct pushes.
+# GitHub gates branch protection and rulesets on private repositories behind a
+# paid plan, so until this repo is on GitHub Pro that rule is enforced here
+# instead. Local only, and bypassable with --no-verify: it catches habit, not
+# a determined push. See docs/stubby-project-brief.md Section 13.1.
+
+protected="refs/heads/main"
+
+while read -r _local_ref _local_sha remote_ref _remote_sha; do
+  if [ "$remote_ref" = "$protected" ]; then
+    echo "blocked: main takes pull requests, not direct pushes." >&2
+    echo "  git switch -c your-branch && git push -u origin your-branch" >&2
+    echo "  then open a PR. Override once with: git push --no-verify" >&2
+    exit 1
+  fi
+done

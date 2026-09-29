@@ -1,0 +1,43 @@
+packages:
+  - apps/*
+  - packages/*
+
+# React Native's Metro bundler resolves modules by walking up node_modules and
+# does not understand pnpm's symlinked store, so the workspace is hoisted.
+# Without this, apps/app cannot resolve react-native at bundle time.
+# (pnpm 10+ reads this here rather than from .npmrc.)
+nodeLinker: hoisted
+
+# pnpm blocks dependency build scripts by default, which is a good default: a
+# postinstall is arbitrary code running at install time. Each `true` below is a
+# deliberate exception and deserves the same scrutiny as adding a dependency.
+allowBuilds:
+  # Downloads the sentry-cli binary, which uploads source maps at build time.
+  # Without it, crash reports arrive as minified stack traces and are close to
+  # useless. Written by `pnpm approve-builds @sentry/cli`, not by hand.
+  '@sentry/cli': true
+
+  # The rest are denied on purpose, written out rather than left blank so that
+  # nobody approves them by reflex the next time pnpm asks. None is needed.
+  #
+  # A leftover of the AppKit evaluation: a version-consistency check that only
+  # prints warnings. AppKit is no longer a direct dependency.
+  '@reown/appkit': false
+  # `node-gyp-build || exit 0` — a native speedup with a JS fallback, and the
+  # `|| exit 0` is the author saying they expect it to fail.
+  keccak: false
+  # Optional `ws` speedups, both with JS fallbacks.
+  bufferutil: false
+  'utf-8-validate': false
+
+# No override for pino under @walletconnect/logger, deliberately.
+#
+# wagmi's WalletConnect connector is marked deprecated for pino 7.11, whose
+# fast-redact carries a prototype-pollution advisory, and wagmi suggests
+# overriding pino to 10. That breaks WalletConnect in a browser: from pino 8
+# the browser build keeps `bindings` as data on child loggers, and
+# @walletconnect/logger 2.1.2 calls `logger.bindings()`, so connecting fails
+# with "bindings is not a function". And the advisory does not reach this app:
+# pino's `browser` field points at browser.js, which loads only
+# quick-format-unescaped, never fast-redact, so fast-redact is not in the web
+# bundle at all (checked in the built output).

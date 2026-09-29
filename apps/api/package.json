@@ -1,0 +1,29 @@
+{
+  "name": "@stubby/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Raffle management API, admin backend, event listeners",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.test.json",
+    "test": "vitest run",
+    "lint": "eslint src test",
+    "migrate": "tsc -p tsconfig.json && node --env-file-if-exists=../../.env dist/db/migrate.js",
+    "start": "node --env-file-if-exists=../../.env dist/server.js",
+    "dev": "tsc -p tsconfig.json && node --env-file-if-exists=../../.env dist/server.js"
+  },
+  "dependencies": {
+    "@hono/node-server": "2.1.1",
+    "@stubby/shared": "workspace:*",
+    "hono": "4.13.9",
+    "pg": "8.23.0",
+    "viem": "2.56.9"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.3",
+    "@types/pg": "8.23.1",
+    "typescript": "6.0.3",
+    "vitest": "5.0.2"
+  }
+}

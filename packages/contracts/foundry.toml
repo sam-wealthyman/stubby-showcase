@@ -1,0 +1,31 @@
+[profile.default]
+src = "src"
+test = "test"
+out = "out"
+libs = ["lib"]
+solc_version = "0.8.28"
+evm_version = "cancun"
+optimizer = true
+optimizer_runs = 200
+# Section 13.3: every function and failure path is tested, so keep the bar high.
+fuzz = { runs = 512 }
+invariant = { runs = 128, depth = 32, fail_on_revert = false }
+gas_reports = ["StubbyRaffle"]
+deny = "warnings"
+
+[fmt]
+line_length = 100
+tab_width = 4
+bracket_spacing = false
+int_types = "long"
+
+# Verified 2026-09-21 from docs.arc.io. Use with --rpc-url arc_testnet.
+[rpc_endpoints]
+# Plain URLs, not `${VAR:-default}`. Forge does not implement that shell
+# fallback — it reads the whole string as one variable name and fails with
+# "environment variable `ARC_MAINNET_RPC_URL:-https://...` not found", so both
+# aliases had never worked. A paid endpoint goes on the command line instead:
+#   forge script ... --rpc-url https://my-endpoint
+arc_testnet = "https://rpc.testnet.arc.io"
+arc_mainnet = "https://rpc.mainnet.arc.io"
+local = "http://127.0.0.1:8545"

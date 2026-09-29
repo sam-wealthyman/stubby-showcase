@@ -1,0 +1,5 @@
+# Secrets first: a formatter running on a staged key is a wasted step, and the
+# point is to stop before anything is recorded.
+node scripts/check-staged-secrets.mjs || exit 1
+
+pnpm exec lint-staged

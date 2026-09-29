@@ -1,0 +1,36 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "stream",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"],
+      // Expo inlines every EXPO_PUBLIC_* value into the bundle at build time,
+      // so the URL the app talks to is part of the artifact, not of its
+      // environment. Declared here so a build made against one API is never
+      // replayed from cache as a build against another.
+      "env": ["EXPO_PUBLIC_API_URL"]
+    },
+    "typecheck": {
+      "dependsOn": ["^build"]
+    },
+    "lint": {},
+    "test": {
+      "dependsOn": ["^build"],
+      // Turbo hides undeclared environment variables from tasks, so the API's
+      // database tests saw no DATABASE_URL and skipped themselves even with a
+      // Postgres service running beside them — CI went green having checked
+      // almost nothing, twice over.
+      //
+      // Declared in `env` rather than `passThroughEnv` on purpose: it becomes
+      // part of the cache key, so a pass recorded without a database is never
+      // replayed as a pass with one.
+      "env": ["DATABASE_URL", "DATABASE_CA_CERT"]
+    },
+    "test:coverage": {
+      "dependsOn": ["^build"],
+      "env": ["DATABASE_URL", "DATABASE_CA_CERT"],
+      "outputs": ["coverage/**"]
+    }
+  }
+}

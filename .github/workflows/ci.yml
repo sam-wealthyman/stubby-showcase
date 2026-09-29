@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Format, lint, typecheck, test
+    runs-on: ubuntu-latest
+
+    # A real Postgres, because without one the API's tests skip themselves and
+    # CI goes green having checked almost nothing. Before this, 30 of the API's
+    # 31 tests skipped here — the SIWE flow, replay refusal and the migration
+    # lock all ran only on a developer's machine.
+    #
+    # It can be a plain container rather than Supabase precisely because ADR
+    # 0007 keeps the database portable: plain SQL, a standard driver, and
+    # migrations the project owns. Any Postgres will do, which is the point.
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: stubby_test
+        ports:
+          - 5432:5432
+        # Without this the job races the database and fails on connect.
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      # `sslmode=disable`: the container speaks plain TCP on localhost, and
+      # `pool.ts` would otherwise try TLS and be refused.
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/stubby_test?sslmode=disable
+
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+
+  live-rpc:
+    name: Live RPC (Arc testnet)
+    runs-on: ubuntu-latest
+    # The e2e chain (Anvil) accepts requests Arc's public RPC refuses. This
+    # makes the watcher's and the app's reads against the real one; see
+    # scripts/check-live-rpc.mjs for the stall it exists to prevent.
+    env:
+      RAFFLE_CONTRACT_ADDRESS: '0xf4FDe0b23A252d01851A50eBb4ca7D4Bad10718c'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @stubby/shared build && pnpm --filter @stubby/api build
+      - run: node scripts/check-live-rpc.mjs

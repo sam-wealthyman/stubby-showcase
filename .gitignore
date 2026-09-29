@@ -1,0 +1,32 @@
+node_modules/
+dist/
+build/
+coverage/
+.turbo/
+*.tsbuildinfo
+
+# secrets — never commit; see .env.example
+.env
+.env.*
+!.env.example
+
+# contracts (Foundry)
+packages/contracts/lcov.info
+packages/contracts/out/
+packages/contracts/cache/
+packages/contracts/broadcast/
+packages/contracts/lib/
+
+# app
+.expo/
+apps/app/dist/
+apps/app/.expo/
+*.keystore
+expo-env.d.ts
+
+# editors / os
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.bundle/

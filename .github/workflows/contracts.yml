@@ -1,0 +1,48 @@
+name: Contracts
+
+# Runs only when Solidity or Foundry config changes, so the pipeline stays green
+# before the contract lands (Section 13.2 requires all checks pass to merge).
+
+on:
+  pull_request:
+    paths:
+      - 'packages/contracts/**/*.sol'
+      - 'packages/contracts/foundry.toml'
+      - 'packages/contracts/remappings.txt'
+      - '.github/workflows/contracts.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'packages/contracts/**/*.sol'
+      - 'packages/contracts/foundry.toml'
+      - 'packages/contracts/remappings.txt'
+
+jobs:
+  forge:
+    name: Build, test, gas, coverage
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/contracts
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+      - uses: foundry-rs/foundry-toolchain@v1.9.1
+      - run: forge fmt --check
+      - run: forge build --sizes
+      - run: forge test -vvv
+      - run: forge snapshot --check --tolerance 1
+      - run: forge coverage --report summary
+
+  slither:
+    name: Slither (fail on medium or higher)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+      - uses: crytic/slither-action@v0.4.2
+        with:
+          target: packages/contracts
+          fail-on: medium

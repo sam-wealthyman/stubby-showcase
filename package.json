@@ -1,0 +1,42 @@
+{
+  "name": "stubby",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.5.1",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky",
+    "test:coverage": "turbo run test:coverage",
+    "check:env": "node scripts/check-env.mjs",
+    "check:env:online": "node scripts/check-env.mjs --online",
+    "generate:abi": "node scripts/generate-abi.mjs",
+    "check:chain": "node scripts/check-chain.mjs",
+    "check:secrets": "node scripts/check-staged-secrets.mjs"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,cjs,mjs,json,md,yml,yaml}": "prettier --write"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "21.2.3",
+    "@commitlint/config-conventional": "21.2.3",
+    "@eslint/js": "10.0.1",
+    "@stubby/shared": "workspace:*",
+    "@vitest/coverage-v8": "5.0.2",
+    "eslint": "10.11.0",
+    "husky": "9.1.7",
+    "lint-staged": "17.5.1",
+    "prettier": "3.9.9",
+    "turbo": "2.11.4",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.70.1",
+    "vitest": "5.0.2"
+  }
+}
