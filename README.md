@@ -34,24 +34,25 @@ on the Arc explorer, with its source verified, as is the [randomness adapter](ht
 
 ## What is in this repository
 
-| Path                 | What                                                                                                                                                               |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `packages/contracts` | `StubbyRaffle` and `D20RandomnessAdapter` in Solidity (Foundry), with unit, invariant and gas tests. The same code is live on mainnet.                             |
-| `apps/api`           | The Hono API (accounts, sessions, sign-in, referrals, push devices) and the watcher that mirrors the chain, sends mail and push, and restarts expired draw clocks. |
-| `packages/shared`    | Chains, USDC units, raffle arithmetic, SIWE and the contract ABIs, shared by the app (private), the API and the tests.                                             |
-| `docs`               | Architecture and the decision records (ADRs).                                                                                                                      |
+| Path                 | What                                                                                                                                                                |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `packages/contracts` | `StubbyRaffle` and `D20RandomnessAdapter` in Solidity (Foundry), with unit, invariant and gas tests. The same code is live on mainnet.                              |
+| `apps/api`           | The Hono API (accounts, sessions, sign-in, referrals, push devices) and the watcher that mirrors the chain, sends mail and push, and restarts expired draw clocks.  |
+| `apps/app`           | The app's Arc layer: wagmi on Arc, wallets, USDC approvals, buying, claiming, starting a draw and gas paid in USDC. The screens are private (`apps/app/README.md`). |
+| `packages/shared`    | Chains, USDC units, raffle arithmetic, SIWE and the contract ABIs, shared by the app, the API and the tests.                                                        |
+| `docs`               | Architecture, the decision records (ADRs) and the mainnet deploy guide, including verifying the contracts on the Arc explorer.                                      |
 
 ## What is left out
 
-- **The app** (web and Android): its screens, design and the buy, sign-in and
-  control-room flows. To see it, use the live site,
-  [stubby.starterdot.com](https://stubby.starterdot.com), or the Android app. It is
-  an Expo Router app (React Native Web and Android) that reads the chain directly
-  with wagmi and talks to the API in this repository.
+- **The app's screens** (web and Android): its components, design and styles.
+  The wallet and chain code under them is in `apps/app`. To see the app, use
+  the live site, [stubby.starterdot.com](https://stubby.starterdot.com), or the
+  Android app. It is an Expo Router app (React Native Web and Android) that
+  reads the chain directly with wagmi and talks to the API in this repository.
 - **Deployment:** the server setup, deploy gate, backups, the deploy and
   Android signing workflows, and the end-to-end suite.
-- **Operating documents:** runbooks, key management and the mainnet deploy
-  guide. Some docs here still link to them; those links are to private files.
+- **Operating documents:** runbooks and key management. Some docs here still
+  link to them; those links are to private files.
 
 Everything that decides who wins and where the money goes is in the contracts,
 and they are all here.
