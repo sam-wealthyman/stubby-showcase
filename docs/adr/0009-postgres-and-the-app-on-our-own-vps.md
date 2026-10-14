@@ -16,7 +16,7 @@ third-party hosts)", so this direction was always the intended one.
 
 ## Decision
 
-Run Postgres and serve the app from the VPS at `23.95.168.183`, alongside the
+Run Postgres and serve the app from our own VPS, alongside the
 existing tenant, at `stubby.starterdot.com`.
 
 - **Postgres 15** on loopback only, `max_connections = 40`. Not reachable from
