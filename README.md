@@ -24,6 +24,9 @@ on the Arc explorer, with its source verified, as is the [randomness adapter](ht
 - **Draw.** The purchase that takes the last stub starts the draw. The random
   number comes from D20DAO's VRF on Arc, and every step links its transaction,
   so anyone can check the result.
+- **Keep selling.** A draw has no deadline: it sells until it fills. Its
+  seven-day clock restarts by itself, sent by a keeper wallet that owns
+  nothing and pays its gas in USDC.
 - **Claim.** Winners are told in the app, by push and by email, and claim to
   their own wallet or any address, with no deadline.
 - **Accounts.** Sign in with a wallet (SIWE), an email link or X. One account
@@ -31,12 +34,12 @@ on the Arc explorer, with its source verified, as is the [randomness adapter](ht
 
 ## What is in this repository
 
-| Path                 | What                                                                                                                                   |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `packages/contracts` | `StubbyRaffle` and `D20RandomnessAdapter` in Solidity (Foundry), with unit, invariant and gas tests. The same code is live on mainnet. |
-| `apps/api`           | The Hono API (accounts, sessions, sign-in, referrals, push devices) and the watcher that mirrors the chain and sends mail and push.    |
-| `packages/shared`    | Chains, USDC units, raffle arithmetic, SIWE and the contract ABIs, shared by the app (private), the API and the tests.                 |
-| `docs`               | Architecture and the decision records (ADRs).                                                                                          |
+| Path                 | What                                                                                                                                                               |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `packages/contracts` | `StubbyRaffle` and `D20RandomnessAdapter` in Solidity (Foundry), with unit, invariant and gas tests. The same code is live on mainnet.                             |
+| `apps/api`           | The Hono API (accounts, sessions, sign-in, referrals, push devices) and the watcher that mirrors the chain, sends mail and push, and restarts expired draw clocks. |
+| `packages/shared`    | Chains, USDC units, raffle arithmetic, SIWE and the contract ABIs, shared by the app (private), the API and the tests.                                             |
+| `docs`               | Architecture and the decision records (ADRs).                                                                                                                      |
 
 ## What is left out
 

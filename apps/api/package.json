@@ -16,14 +16,14 @@
   "dependencies": {
     "@hono/node-server": "2.1.1",
     "@stubby/shared": "workspace:*",
-    "hono": "4.13.9",
+    "hono": "4.13.12",
     "pg": "8.23.0",
     "viem": "2.56.9"
   },
   "devDependencies": {
-    "@types/node": "26.6.3",
+    "@types/node": "26.6.4",
     "@types/pg": "8.23.1",
     "typescript": "6.0.3",
-    "vitest": "5.0.2"
+    "vitest": "5.0.3"
   }
 }
