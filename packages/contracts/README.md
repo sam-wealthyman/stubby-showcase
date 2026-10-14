@@ -70,8 +70,13 @@ both mock contracts are unsafe by design: anyone can mint the token, and the
 ## Deploying for real
 
 ```bash
-forge script script/Deploy.s.sol:Deploy --rpc-url "$ARC_RPC_URL" --broadcast --verify
+forge script script/Deploy.s.sol:Deploy --rpc-url "$ARC_RPC_URL" --broadcast \
+  --verify --verifier sourcify
 ```
+
+`--verifier sourcify` publishes the source through Sourcify, which the Arc
+explorer imports; its own API is behind a bot check that refuses `forge`. See
+`docs/mainnet-deploy.md`, Verifying the source.
 
 Reads `USDC_ADDRESS`, `VRF_COORDINATOR_ADDRESS`, `TREASURY_ADDRESS` and
 `OWNER_ADDRESS` from the environment, and fails before broadcasting if one is
